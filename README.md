@@ -1,8 +1,37 @@
-# cheatsheets-next
-Hello , everyone I'am documenting my Learnings here. the points that i think should be noted will be added here. so the purpose of this repo is clear : To only refer in future on important area that need revisions.
+# 📘 Cheatsheets — Next.js
 
-1. # Not make api/route when using Nextjs if possible:
-   because that makes client - request ur nextjs server - then your nextjs server again calls your own api-route then response is send to clent - can u see the problem
-   # Instead use SeverActions or ServerComponets
+Hello everyone!  
+I'm documenting my learnings here.  
+Anything important that I think needs revision will be added in this repo.
+
+The goal is simple:  
+👉 A quick reference for important concepts I want to revisit in the future.
+
+---
+
+## 📌 Why This Repo Exists
+To keep short, clear notes that help me revise fast.  
+No long explanations — just the important things.
+
+---
+
+## 🚫 Avoid Creating Unnecessary API Routes in Next.js
+
+When you do this:
+
+**Client → Next.js Server → Your Own API Route → Response to Client**
+
+…you’re basically calling yourself unnecessarily.
+
+### ✔️ Instead Use:
+- **Server Actions**
+- **Server Components**
+- **Direct DB Calls in Server Functions**
+- **Route Handlers only when truly needed**
 
 
+## 📌 Why This Repo Exists
+To keep short, clear notes that help me revise fast.  
+No long explanations — just the important things.
+
+---
