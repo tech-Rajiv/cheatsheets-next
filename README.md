@@ -9,12 +9,6 @@ The goal is simple:
 
 ---
 
-## 📌 Why This Repo Exists
-To keep short, clear notes that help me revise fast.  
-No long explanations — just the important things.
-
----
-
 ## 🚫 Avoid Creating Unnecessary API Routes in Next.js
 
 When you do this:
@@ -30,8 +24,4 @@ When you do this:
 - **Route Handlers only when truly needed**
 
 
-## 📌 Why This Repo Exists
-To keep short, clear notes that help me revise fast.  
-No long explanations — just the important things.
 
----
