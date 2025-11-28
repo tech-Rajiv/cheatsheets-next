@@ -10,6 +10,25 @@ The goal is simple:
 
 
 
+# 👉 Next wants to know your components
+* Every coomponents has to have type example 'use client' or 'use server', by default if you donot provide anything it is considered as 'use server' server-components
+* In Reactjs we cannot do async components, but next can do , so we can call db and make async component take that data and generate html css js in server and serve that response
+```
+async function getUser() {
+  return user;    // db call
+}
+
+// 2) Async Server Component
+export default async function Page() {
+  const user = await getUser();  // call server function
+
+  return (
+    <main>render here</main>
+  );
+}
+```
+* In React we can do waterfall effect, using useEffect but not this async function.
+
 # 👉 Avoid Creating Unnecessary API Routes in Next.js
 * Calling your own API route from your own Next.js server is unnecessary overhead.
 * Example: Client → Next.js Server → Your API Route → Response (all inside same app).
