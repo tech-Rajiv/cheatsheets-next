@@ -42,13 +42,19 @@ export default async function Page() {
 * CSR apps (React) work fine because user-specific authenticated requests happen *after* JS loads and can read `localStorage`.
 * SSR apps (Next.js) must know the user **before rendering HTML**, so they cannot rely on `localStorage`.
 * Cookies are automatically sent on every request, including the very first, making them perfect for SSR auth.
-* Cookies allow the server to authenticate instantly and send personalized HTML on first load.
 * Because cookies auto-send, they introduce CSRF risk — a malicious site can trigger requests using your cookies.
-* Use **HttpOnly** cookies to prevent frontend JS from reading or modifying the cookie (protects against XSS).
 * Use **SameSite=Lax** for safe defaults: cookies allowed on normal navigation but blocked on cross-site POST requests (prevents CSRF).
-* **SameSite=Strict** is most secure but breaks login when arriving from external sites.
-* **SameSite=None** sends cookies to all domains (must use Secure), used for 3rd-party integrations.
+* Use **SameSite=Strict** is most secure but breaks login when arriving from external sites. banks ussualy use this.
+* Use **HttpOnly** cookies to prevent frontend JS from reading or modifying the cookie (protects against XSS).
 * `expiry: <seconds>` sets how long the cookie is valid.
-
+* Your browser stores cookies from every website you visit, but… Each website gets its own private cookie storage.
+*  facebook.com -	fb_session, google.com - g_session, yourapp.com	token - refresh-token. They cannot read each other's cookies.
+*  When you open example.com, the browser looks at:
+*  domain matches	cookie domain must match request domain
+*  path matches	/api cookie won’t be sent to /auth
+*  secure=true	only sent on HTTPS
+*  sameSite=Lax/Strict	controls cross-site sending
+*  If rules match → browser autosends only those cookies with the request.
+* 
 ---
 
