@@ -14,8 +14,7 @@ The goal is simple:
 
 ---
 
-## 🚫 Avoid Creating Unnecessary API Routes in Next.js
-
+##  Avoid Creating Unnecessary API Routes in Next.js
 * Calling your own API route from your own Next.js server is unnecessary overhead.
 * Example: Client → Next.js Server → Your API Route → Response (all inside same app).
 * Prefer using **Server Actions**, **Server Components**, or **direct DB calls** from server code.
@@ -24,7 +23,6 @@ The goal is simple:
 ---
 
 # cookies
-
 * In browser-initiated first requests, we cannot add custom headers (like tokens) because the browser sends them automatically.
 * CSR apps (React) work fine because user-specific authenticated requests happen *after* JS loads and can read `localStorage`.
 * SSR apps (Next.js) must know the user **before rendering HTML**, so they cannot rely on `localStorage`.
