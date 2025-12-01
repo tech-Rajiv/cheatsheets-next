@@ -35,8 +35,25 @@ export default async function Page() {
 * Prefer using **Server Actions**, **Server Components**, or **direct DB calls** from server code.
 * Only use **Route Handlers** when you truly need an API endpoint (e.g., external clients).
 
-
-
+# 👉 Rendering key points
+Next.js does NOT automatically make your route a static site (SSG) or build-time HTML just because you didn’t use "use client".
+### **The default is: “Server Component with Static Rendering (unless data decides otherwise)”**
+Meaning:
+- If your page has **no dynamic data**, yes → it becomes **SSG**. Server Component + no dynamic fetch = SSG
+- If your page imports `fetch()` with default caching → it also becomes **SSG**. Server Component + fetch() with default caching = SSG
+- If your page uses **`fetch(..., { cache: 'no-store' })`** → it becomes **SSR**.  Fetch with cache: "no-store" = SSR
+- Fetch with { next: { revalidate: X } } = ISR
+- If your page uses **cookies, headers, dynamic route params**, etc. → it becomes **SSR**.
+- `"use client"` only makes the component run on browser — it does **not** affect SSG/SSR.
+If your component uses:
+- `cookies()`
+- `headers()`
+- `searchParams`
+- dynamic `params`
+- database queries inside the component
+- `unstable_noStore()`
+**5. Using dynamic things like above makes the route SSR**
+  
 # 👉 cookies
 * In browser-initiated first requests, we cannot add custom headers (like tokens) because the browser sends them automatically.
 * CSR apps (React) work fine because user-specific authenticated requests happen *after* JS loads and can read `localStorage`.
@@ -55,6 +72,6 @@ export default async function Page() {
 *  secure=true	only sent on HTTPS
 *  sameSite=Lax/Strict	controls cross-site sending
 *  If rules match → browser autosends only those cookies with the request.
-* 
+
 ---
 
