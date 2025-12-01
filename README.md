@@ -133,6 +133,10 @@ export async function POST(request: Request) {
   }
 }
 ```
+* The client sends a request to rate limiting middleware.
+* Rate limiting middleware fetches the counter from the corresponding bucket in Redis and checks if the limit is reached or not.
+* If the limit is reached, the request is rejected.
+* If the limit is not reached, the request is sent to API servers. Meanwhile, the system increments the counter and saves it back to Redis.
 * ttl key in redis return remaining time of expriy of the key so it can used at time of rejecion as response to wait till this time.
 ```jsx
 if (attempt === 1) await redis.expire(key, 60);
