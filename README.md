@@ -75,7 +75,7 @@ If your component uses:
 
 ---
   
-# 👉 Important points
+# 👉 params / urls
 
 * in server components to get url parmas, if url is appurl/magic-link?token=xyz , so app/magic-link/page.jsx code:
 ```jsx
@@ -96,4 +96,47 @@ export default function Page() {
 }
 ```
 
-
+# 👉 Rate limiters & IPs
+* Rate limiter can be used to stop user from spamming request, in small demo we can test by using in a particualr route.ts and the way we do is with help of redis to store attempts data
+```jsx
+export async function POST(request: Request) {
+  try {
+    const { username } = await request.json();
+    const key = `attempt:${username}`;
+    const attempt = await redis.incr(key);
+    if (attempt === 1) {
+      await redis.expire(key, 60); // infirst attempt
+    }
+    if (attempt <= 5) {
+      return NextResponse.json({
+        msg: "you request accepted successfully",
+        attempt,
+      });
+    } else {
+      return NextResponse.json(
+        {
+          msg: `too many attempts please try after some time - attempt${attempt}`,
+        },
+        { status: 429 }
+      );
+    }
+  } catch (error) {
+    return NextResponse.json(
+      { message: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}
+```
+* Ideally we should do this in middleware, so create a middleware that runs only on api/ routes
+```jsx
+export const config = {
+  matcher: "/api/:path*",
+};
+```
+* Because there would be another middleware which will check in navigate , route calling etc about token so these two are diiferent , ratelimitter should be used to stop api/callings
+* We can access IP of user and can limit that, in middleware we can do req.ip but in node js runtime we need to get headers , so we do
+```jsx
+   const ip = req.ip ||req.headers.get("x-forwarded-for")?.split(",")[0] ||"unknown";
+```
+* This guarantees correct IP everywhere.
