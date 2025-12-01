@@ -77,7 +77,7 @@ If your component uses:
   
 # 👉 Important points
 
-* in server components to get url parmas, do this
+* in server components to get url parmas, if url is appurl/magic-link?token=xyz , so app/magic-link/page.jsx code:
 ```jsx
 export default async function Page({ searchParams }) {
   const { token } = await searchParams;
