@@ -13,7 +13,7 @@ The goal is simple:
 # 👉 Next wants to know your components
 * Every coomponents has to have type example 'use client' or 'use server', by default if you donot provide anything it is considered as 'use server' server-components
 * In Reactjs we cannot do async components, but next can do , so we can call db and make async component take that data and generate html css js in server and serve that response
-```
+```jsx
 async function getUser() {
   return user;    // db call
 }
