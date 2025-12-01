@@ -97,7 +97,12 @@ export default function Page() {
 ```
 
 # 👉 Rate limiters & IPs
-* Rate limiter can be used to stop user from spamming request, in small demo we can test by using in a particualr route.ts and the way we do is with help of redis to store attempts data
+* The basic idea of rate limiting algorithms is simple. At the high-level, we need a counter to keep track of how many requests are sent from the same user, IP address, etc. If the counter is larger than the limit, the request is disallowed.
+* Where shall we store counters? Using the database is not a good idea due to slowness of disk access. In-memory cache is chosen because it is fast and supports time-based expiration strategy.
+* For instance, Redis [11] is a popular option to implement rate limiting. It is an in-memory store that offers two commands: INCR and EXPIRE.
+* INCR: It increases the stored counter by 1.
+* EXPIRE: It sets a timeout for the counter. If the timeout expires, the counter is automatically deleted.
+
 ```jsx
 export async function POST(request: Request) {
   try {
@@ -128,6 +133,18 @@ export async function POST(request: Request) {
   }
 }
 ```
+* ttl key in redis return remaining time of expriy of the key so it can used at time of rejecion as response to wait till this time.
+```jsx
+if (attempt === 1) await redis.expire(key, 60);
+
+    if (attempt > 10) {
+      const ttl = await redis.ttl(key);
+      return NextResponse.json(
+        { error: `Too many requests. Try again in ${ttl}s` },
+        { status: 429 }
+      );
+    }
+```
 * Ideally we should do this in middleware, so create a middleware that runs only on api/ routes
 ```jsx
 export const config = {
@@ -135,7 +152,8 @@ export const config = {
 };
 ```
 * Because there would be another middleware which will check in navigate , route calling etc about token so these two are diiferent , ratelimitter should be used to stop api/callings
-* We can access IP of user and can limit that, in middleware we can do req.ip but in node js runtime we need to get headers , so we do
+* We can access IP of user and can limit that, in Nextjs middleware we can do req.ip
+* But in node js runtime we need to get headers , so we do
 ```jsx
    const ip = req.ip ||req.headers.get("x-forwarded-for")?.split(",")[0] ||"unknown";
 ```
