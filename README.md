@@ -74,4 +74,16 @@ If your component uses:
 *  If rules match → browser autosends only those cookies with the request.
 
 ---
+  
+# 👉 Important points
+
+* in server components to get url parmas, do this
+```jsx
+export default async function Page({ searchParams }) {
+  const { token } = await searchParams;
+  return <h1>Token : {token}</h1>
+}
+
+```
+
 
