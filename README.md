@@ -83,7 +83,17 @@ export default async function Page({ searchParams }) {
   const { token } = await searchParams;
   return <h1>Token : {token}</h1>
 }
+```
+* In clint do this,
+```jsx
+import { useSearchParams } from "next/navigation";
 
+export default function Page() {
+  const search = useSearchParams();
+  const token = search.get("token");
+  console.log("TOKEN → ", token);
+  return <div>Verifying...</div>;
+}
 ```
 
 
