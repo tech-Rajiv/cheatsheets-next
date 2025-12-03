@@ -200,3 +200,20 @@ export const config = {
 
 ```
 * Notice how i use withAuth fn which is by next-auth and helps to redirect is not authorized
+
+
+# 👉 ARCHITECTURE to render user specific data
+
+ 1️⃣ Default (Preferred)
+* Use Server Components to fetch user and render page.
+RSC → getServerSession() → fetch DB → return JSX
+
+2️⃣ Client Components (when required)
+* Use session from client for interaction, then server action for data.
+Client → useSession() → serverAction → return data
+
+ 3️⃣ Hybrid (very common)
+* Server component fetches user data initially →
+* Client component hydrates UI for interactivity.
+RSC (initial load) → Client (interactive updates)
+* This is simply parent server comp just fetch data and render a client comp with sending data as props.
