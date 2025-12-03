@@ -162,3 +162,41 @@ export const config = {
    const ip = req.ip ||req.headers.get("x-forwarded-for")?.split(",")[0] ||"unknown";
 ```
 * This guarantees correct IP everywhere.
+
+# 👉 Protecting access : Industry uses one of these patterns
+* Pattern A: Protect pages with middleware.
+* Pattern B: Protect server components using getServerSession, This is used inside layout, page, RSC, server actions:
+```jsx
+const session = await getServerSession(authOptions);
+if (!session) redirect("/login");
+```
+* Pattern C: Protect API routes
+```jsx
+const session = await getServerSession(authOptions);
+if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+```
+
+# 👉 Middlwares
+* Middleware runs on Edge → cannot read request body, DB, or modify headers. Edge runtime has limits:
+* You can:
+✔️ Read cookies
+✔️ Read next-auth JWT (token)
+✔️ Redirect
+✔️ Protect routes
+* so an middleware with next-auth looks like this
+```jsx
+import withAuth from "next-auth/middleware";
+
+export default withAuth({
+  callbacks: {
+    authorized: ({ token }) => !!token,
+  },
+});
+
+export const config = {
+  matcher: ["/dashboard/:path*", "/user/:path*"],
+};
+
+```
+* Notice how i use withAuth fn which is by next-auth and helps to redirect is not authorized
